@@ -1,6 +1,7 @@
+#!/bin/bash
 wall-help-cn() {
-echo -e "${BLUE}#####${RED}This is the wall color tool help documentation${BLUE}#####${NC}"
-echo -e "
+  echo -e "${BLUE}#####${RED}This is the wall color tool help documentation${BLUE}#####${NC}"
+  echo -e "
 用法：
   ${BLUE}➜${NC} ${YELLOW}wall -[color] \"Text\"${NC}
 

@@ -1,8 +1,9 @@
-wall-help-en(){
-echo -e "${BLUE}#####${RED}This is the wall color tool help documentation${BLUE}#####${NC}"
-echo -e "
+#!/bin/bash
+wcl-help-en() {
+  echo -e "${BLUE}#####${RED}This is the wall color tool help documentation${BLUE}#####${NC}"
+  echo -e "
 Usage:
-  ${BLUE}➜${NC} ${YELLOW}wall -[color] \"Text\"${NC}
+  ${BLUE}➜${NC} ${YELLOW}wcl -[color] \"Text\"${NC}
 
 Description:
   Outputs a centered line of text with a background.
@@ -23,7 +24,7 @@ Advanced Usage:
   [${YELLOW}echo -n${NC}] and the defined function variable name.
 
 Usage:
-  ${BLUE}➜${NC} ${YELLOW}echo -n "\${color}";wall -[color] \"Text\";echo -n \"\${NoColor}\"
+  ${BLUE}➜${NC} ${YELLOW}echo -n "\${color}";wcl -[color] \"Text\";echo -n \"\${NoColor}\"
 
 Author:
   ${BLUE}Clyde Cole${NC}

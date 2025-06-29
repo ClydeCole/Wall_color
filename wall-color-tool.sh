@@ -19,6 +19,9 @@ BLUE='\033[38;5;117m'
 NC='\033[0m'
 ############### color ###############
 
+
+# 此處有bug 每次運行的時候都是一個新的會話，不是全局變量，所以無法儲存是否設定語言的信息，
+# 這裏也許可以更改為運行install.sh 的時候來選擇語言，然後保留一個，用戶的語言/直到用戶輸入 wcl -language 來修改語言
 ###############Language sitting###############
 setting() {
     if [[ "$language" = "wcl-help-en" || "$language" = "wcl-help-cn" ]]; then

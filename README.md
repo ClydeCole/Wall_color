@@ -16,7 +16,7 @@ wcl -[顏色] "你的文字"
 wcl -pink "Hello World!"
 wcl -red "⚠️ WARNING: Something is wrong."
 ```
-[基本用法](picture/基本功能.png)
+![基本用法](picture/基本用法.png)
 
 - 進階用法
 若你希望自訂`字體顏色`或`加粗文字`，可搭配 `echo -n` 和定義好的顔色變數使用：  
@@ -27,7 +27,7 @@ RED='\033[38;2;255;0;0m'
 NC='\033[0m'
 echo -n "${RED}"; wcl -green "Red Massage"; echo -n "${NC}"
 ```
-[進階用法](picture/進階用法.png)
+![進階用法](picture/進階用法.png)
 
 🎨 `wcl`所支援的顏色
 | 參數      | 顏色說明 |

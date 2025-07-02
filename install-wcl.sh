@@ -4,6 +4,7 @@ copy_file(){ # copy 程式檔案目錄到bin 和 opt
     cp ./wall-color-tool.sh /usr/bin
     cp ./wcl-help-en.sh /opt/wcl
     cp ./wcl-help-cn.sh /opt/wcl
+    mv ./usr/bin/wall-color-tool.sh ./usr/bin/wcl
 }
 
 if [[ -d /usr/bin/wall-color-tool.sh || -d /opt/wcl ]]; then # 檢索/usr/bin 和/opt/是否有wcl

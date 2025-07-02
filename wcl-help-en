@@ -1,4 +1,4 @@
-#!/bin/bash
+sh ./color
 wcl-help-en() {
   echo -e "${BLUE}#####${RED}This is the wall color tool help documentation${BLUE}#####${NC}"
   echo -e "

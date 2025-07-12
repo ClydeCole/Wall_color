@@ -1,13 +1,17 @@
 #!/usr/bin/bash
+if [[ "$EUID" -ne 0 ]]; then
+    echo "必須以 root 權限執行，正在嘗試 sudo 執行..."
+    sudo "$0" "$@"
+fi
 
 copy_file(){ # copy 程式檔案目錄到bin 和 opt
     cp ./wall-color-tool.sh /usr/bin
     cp ./wcl-help-en.sh /opt/wcl
     cp ./wcl-help-cn.sh /opt/wcl
-    mv ./usr/bin/wall-color-tool.sh ./usr/bin/wcl
+    mv /usr/bin/wall-color-tool.sh /usr/bin/wcl
 }
 
-if [[ -d /usr/bin/wall-color-tool.sh || -d /opt/wcl ]]; then # 檢索/usr/bin 和/opt/是否有wcl
+if [[ -d /usr/bin/wcl || -d /opt/wcl ]]; then # 檢索/usr/bin 和/opt/是否有wcl
     printf "\033[31mERROR ➜\033[0mYour /usr/bin/ or /opt/ have a \"wcl\" dir\n"
     read -r -p "do you want delete it (Y/N)" choice # 詢問是否保留
     if [[ $choice == "Y" || $choice == "y" ]]; then # 保留

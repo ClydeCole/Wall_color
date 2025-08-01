@@ -4,29 +4,44 @@ if [[ "$EUID" -ne 0 ]]; then
     sudo "$0" "$@"
 fi
 
-copy_file(){ # copy 程式檔案目錄到bin 和 opt
-    cp ./wall-color-tool.sh /usr/bin
-    cp ./wcl-help-en.sh /opt/wcl
-    cp ./wcl-help-cn.sh /opt/wcl
-    mv /usr/bin/wall-color-tool.sh /usr/bin/wcl
+setting_language() {
+    printf "\033[1;33mPlease choose your language:\033[0m\n"
+    printf "\033[1;32m1\033[0m. English\n"
+    printf "\033[1;32m2\033[0m. 中文\n"
+    read -r -p "Enter your choice (1/2): " lang_choice
+    if [[ $lang_choice == "1" ]]; then # 選擇英文
+        echo "y"
+    elif [[ $lang_choice == "2" ]]; then # 選擇中文
+        echo "y"
+    else # 都不選
+        echo "Invalid choice, defaulting to English. You can use the command \"wcl -lang\" to change language"
+        echo "y"
+    fi
 }
 
-if [[ -d /usr/bin/wcl || -d /opt/wcl ]]; then # 檢索/usr/bin 和/opt/是否有wcl
-    printf "\033[31mERROR ➜\033[0mYour /usr/bin/ or /opt/ have a \"wcl\" dir\n"
-    read -r -p "do you want delete it (Y/N)" choice # 詢問是否保留
-    if [[ $choice == "Y" || $choice == "y" ]]; then # 保留
-        rm -rf /usr/bin/wcl # 如果有
+copy_file() { # 函數 用來複製檔案
+    mkdir -p /opt/wcl
+    cp ./wcl /usr/bin
+    cp ./wcl-help-en /opt/wcl
+    cp ./wcl-help-cn /opt/wcl
+    cp ./color /opt/wcl
+    cp ./setting-help-language /opt/wcl
+}
+
+if [ -f /usr/bin/wcl ]; then # 檢查目錄是否存在
+    echo "你的系統已經安裝了WCL是否要覆蓋？(y/n)"
+    read -r choice
+    if [[ $choice == "y" || $choice == "Y" ]]; then
         rm -rf /opt/wcl
-        mkdir /opt/wcl
+        rm -f /usr/bin/wcl
         copy_file
-        printf "\033[1;32mInstallation\033[1;33m completed\033[0m\n"
-    else # 不保留
-        echo "Stop installation"
+        echo "WCL安裝完成"
+        setting_language
+    else
+        echo "Stop Installation."
     fi
 else
-    mkdir /opt/wcl # 入果沒有直接直接安裝
     copy_file
-    printf "\033[1;32mInstallation\033[1;33m completed\033[0m\n"
+    echo "WCL安裝完成"
+    setting_language
 fi
-
-#刪除當前目錄文件

@@ -1,0 +1,78 @@
+#!/usr/bin/bash
+
+sh /opt/wcl/color
+sh /opt/wcl/wcl-help-en
+sh /opt/wcl/wcl-help-cn
+
+############### Main of Wall Color ####################
+wcl() {
+    if [ $# -lt 2 ] || [ "$(echo -e "$1" | cut -c 1)" != "-" ]; then
+    # 解析參數
+
+
+    color_option=$(echo -e "$1" | cut -c 2-)
+    # 去掉前面的短橫線
+    # 
+    #
+    #
+    text="$2"
+    fi
+    # 檢查顏色是否存在
+    bg_var="COL_${color_option}"
+    eval "BG=\$$bg_var"
+    if [ -z "$BG" ]; then
+        if [ -z "${language:-}" ]; then
+            setting
+            ${language}
+        else
+            ${language}
+        fi
+        return 1
+    fi
+    calculate_width() {
+        if command -v wc >/dev/null 2>&1 && [ "$(
+            wc -L <<EOF
+$text
+EOF
+        )" -gt 0 ] 2>/dev/null; then
+            wc -L <<EOF
+$text
+EOF
+            return
+        fi
+
+        echo -e "$text" | awk '{
+        width = 0;
+        for (i=1; i<=length; i++) {
+            c = substr($0, i, 1);
+            if (c ~ /[[:print:]]/) {  # 可打印ASCII字符
+                width += 1;
+                } else {
+                width += 2;
+            }
+        }
+        print width;
+    }'
+    }
+
+    get_term_width() {
+        stty size 2>/dev/null | awk '{print $2}' || echo -e 80
+    }
+
+    term_width=$(get_term_width)
+    text_width=$(calculate_width "$text")
+
+    left_pad=$(((term_width - text_width) / 2))
+    [ $left_pad -lt 0 ] && left_pad=0
+    right_pad=$((term_width - text_width - left_pad))
+    [ $right_pad -lt 0 ] && right_pad=0
+
+    left_fill=$(printf "%${left_pad}s" "")
+    right_fill=$(printf "%${right_pad}s" "")
+
+    # 输出
+    printf "%b%s%b\n" "${BG}" "${left_fill}${text}${right_fill}" "${NC}"
+}
+############### Main of Wall Color ####################
+wcl "$@"
+wcl -red "Konichiwa"

@@ -1,5 +1,4 @@
-#!/bin/bash
-wall-help-cn() {
+wcl-help-cn() {
   echo -e "${BLUE}#####${RED}This is the wall color tool help documentation${BLUE}#####${NC}"
   echo -e "
 用法：

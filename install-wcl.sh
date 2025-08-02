@@ -1,47 +1,54 @@
 #!/usr/bin/bash
-if [[ "$EUID" -ne 0 ]]; then
-    echo "必須以 root 權限執行，正在嘗試 sudo 執行..."
-    sudo "$0" "$@"
-fi
+# if [[ "$EUID" -ne 0 ]]; then
+#     echo "必須擁有管理員權限，正在嘗試 sudo 執行..."
+#     sudo "$0" "$@"
+# fi
+
+# 後期將設定全局安裝和用戶安裝兩個選項
 
 setting_language() {
-    printf "\033[1;33mPlease choose your language:\033[0m\n"
-    printf "\033[1;32m1\033[0m. English\n"
-    printf "\033[1;32m2\033[0m. 中文\n"
-    read -r -p "Enter your choice (1/2): " lang_choice
-    if [[ $lang_choice == "1" ]]; then # 選擇英文
-        echo "y"
-    elif [[ $lang_choice == "2" ]]; then # 選擇中文
-        echo "y"
+    printf "\033[1;33m 請選擇你的語言:\033[0m\n"
+    printf "\033[1;32m1\033[0m. 正體中文\n"
+    printf "\033[1;32m2\033[0m. English\n"
+    read -r -p "輸入你的選擇 (1/2): " lang_choice
+
+    if [[ $lang_choice == "1" ]]; then # 選擇中文
+        echo "cn" >> ~/.local/share/wcl/language.config
+    elif [[ $lang_choice == "2" ]]; then # 選擇英文
+        echo "en" >> ~/.local/share/wcl/language.config
     else # 都不選
-        echo "Invalid choice, defaulting to English. You can use the command \"wcl -lang\" to change language"
-        echo "y"
+        echo "cn" >> ~/.local/share/wcl/language.config
+        echo "無效選擇, 預設爲繁體中文. 你可以使用命令 \"wcl -lang\" 來更改語言"
     fi
 }
 
-copy_file() { # 函數 用來複製檔案
-    mkdir -p /opt/wcl
-    cp ./wcl /usr/bin
-    cp ./wcl-help-en /opt/wcl
-    cp ./wcl-help-cn /opt/wcl
-    cp ./color /opt/wcl
-    cp ./setting-help-language /opt/wcl
+copy_file() { # 用來複製檔案的函數
+    mkdir -p ~/.local/bin ~/.local/share/wcl 
+
+    cp ./wcl ~/.local/bin/ #主程式
+    cp ./color ~/.local/share/wcl/ # 配置文件
+    cp ./wcl-help-cn ./wcl-help-en ~/.local/share/wcl/ # 幫助文檔
+    chmod +x ~/.local/bin/wcl # 設定可執行權限
 }
 
-if [ -f /usr/bin/wcl ]; then # 檢查目錄是否存在
-    echo "你的系統已經安裝了WCL是否要覆蓋？(y/n)"
+
+
+
+if [ -f ~/.local/bin/wcl ]; then # 檢查目錄是否存在
+    echo "你的系統已經安裝了WCL是否要覆蓋?(y/N)" # 如果存在
     read -r choice
-    if [[ $choice == "y" || $choice == "Y" ]]; then
-        rm -rf /opt/wcl
-        rm -f /usr/bin/wcl
+    if [[ $choice == "y" || $choice == "Y" ]]; then # 確認覆蓋
+        rm ~/.local/bin/wcl
+        rm -rf ~/.local/share/wcl
         copy_file
         echo "WCL安裝完成"
-        setting_language
-    else
-        echo "Stop Installation."
+    else # 取消覆蓋
+        echo "停止安裝"
+        exit 0
     fi
 else
     copy_file
     echo "WCL安裝完成"
-    setting_language
 fi
+
+setting_language

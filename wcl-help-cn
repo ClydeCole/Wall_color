@@ -1,4 +1,4 @@
-wcl-help-cn() {
+wcl_help_cn() {
   echo -e "${BLUE}#####${RED}This is the wall color tool help documentation${BLUE}#####${NC}"
   echo -e "
 用法：
@@ -24,14 +24,5 @@ wcl-help-cn() {
 
   用法：
   ${BLUE}➜${NC} ${YELLOW}echo -n "\${color}";wall -[color] \"Text\";echo -n \"\${NoColor}\"
-
-Author:
-  ${BLUE}Clyde Cole${NC}
-
-Version:
-  1.0
-
-Status:
-  Actively adding new features. Stay tuned!
 "
 }

@@ -1,24 +1,84 @@
 #!/usr/bin/bash
-
-sh /opt/wcl/color
-sh /opt/wcl/wcl-help-en
-sh /opt/wcl/wcl-help-cn
+bash ~/.local/share/wcl/color
+bash ~/.local/share/wcl/functions
+bash ~/.local/share/wcl/wcl-help-en
+bash ~ /.local/share/wcl/wcl-help-cn
 
 ############### Main of Wall Color ####################
 wcl() {
-    if [ $# -lt 2 ] || [ "$(echo -e "$1" | cut -c 1)" != "-" ]; then
-    # 解析參數
-
-
-    color_option=$(echo -e "$1" | cut -c 2-)
-    # 去掉前面的短橫線
-    # 
-    #
-    #
-    text="$2"
+#下面是爲了檢測是否爲特殊參數
+case "$1" in
+# 幫助文檔
+    -h|-help|--hellp)
+    show_wcl_help_
+    exit 0
+    ;;
+    # 切換語言
+    -lang)
+    # 沒有內容，進入選擇菜單
+    if [ $# = "1" ]; then
+        setting_language
+    #中文
+    elif [ "$2" = "cn" ];then
+        sed -i 's/^language=.*/language="cn"/' ~/.local/share/wcl/settings.conf
+        echo "設定成功"
+    # 英文
+    elif [ "$2" = "en" ];then
+        sed -i 's/^language=.*/language=\"en\"/' ~/.local/share/wcl/settings.conf
+        echo "Language setting successful"
+    else
+        printf "語言錯誤,目前支持的語言有:\n正體中文: cn\nEnglish : en\n"
     fi
-    # 檢查顏色是否存在
-    bg_var="COL_${color_option}"
+    exit 0
+    ;;
+esac
+
+# 下面是爲了檢查用戶輸入是否符合基礎要求
+# 第一個檢查長度
+# 第二個檢查顏色參數是否在前方加入了-
+# 第三個檢查文本內容是否用雙引號標注
+if [ $# -gt 2 ]; then
+    echo "內容過多"
+    exit 1
+elif [ "${1:0:1}" != "-" ]; then
+    echo "必須以-開頭"
+    exit 1
+elif [ @# -lt "2" ]; then
+    echo "參數似乎不足"
+fi
+
+#   wcl -pink "HELLO"
+#         ^      ^
+#         1      2
+#
+#   wcl -red 'Hi'
+#         ^   ^
+#         1   2
+#
+#   wcl -lang cn
+#         ^   ^
+#         1   2
+
+color_option="${1:1}"
+if [ -n "${color_option}" ];then # -n 空執行， -z 非空執行。 color_option爲非空，不執行
+    echo "無效的顏色"
+# else
+    # echo "有效顏色"
+fi
+
+read -r rows cols < <(stty size)
+echo "rows:$rows cols:$cols"
+
+text_option=$2
+len(text_option)
+
+
+
+    if [ $# -lt 2 ] || [ "$(echo -e "$1" | cut -c 1)" != "-" ]; then # 判斷是否符合條件
+        color_option=$(echo -e "$1" | cut -c 2-) # 去掉前面的短橫線
+        text="$2" # 獲取文本
+    fi
+    bg_var="COL_${color_option}" # 檢查顏色是否存在
     eval "BG=\$$bg_var"
     if [ -z "$BG" ]; then
         if [ -z "${language:-}" ]; then
@@ -54,25 +114,19 @@ EOF
         print width;
     }'
     }
-
     get_term_width() {
         stty size 2>/dev/null | awk '{print $2}' || echo -e 80
     }
-
     term_width=$(get_term_width)
     text_width=$(calculate_width "$text")
-
     left_pad=$(((term_width - text_width) / 2))
     [ $left_pad -lt 0 ] && left_pad=0
     right_pad=$((term_width - text_width - left_pad))
     [ $right_pad -lt 0 ] && right_pad=0
-
     left_fill=$(printf "%${left_pad}s" "")
     right_fill=$(printf "%${right_pad}s" "")
-
     # 输出
     printf "%b%s%b\n" "${BG}" "${left_fill}${text}${right_fill}" "${NC}"
 }
 ############### Main of Wall Color ####################
 wcl "$@"
-wcl -red "Konichiwa"

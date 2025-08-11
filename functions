@@ -1,4 +1,4 @@
-
+# shellcheck disable=all
 ###############wcl -lang 語言設定###############
 setting_language() {
 while true; do # 循環直至正確
@@ -7,8 +7,7 @@ while true; do # 循環直至正確
     wcl -gray "1➜ Chinese"
     echo -e -n "${YELLOW}"
     wcl -gray "2➜ English"
-    echo "${YELLOW}選擇 (1/2): ${BLUE}"
-
+    printf "%s${YELLOW}選擇 (1/2): ${BLUE}"
 # 用戶選擇語言
     read -r Choice
     echo -e "${NC}"

@@ -6,7 +6,7 @@
 
 ## 使用方式
 
-### 基本用法
+- 基本用法
 
 ```bash
 wcl -[顏色] "你的文字"
@@ -21,11 +21,11 @@ wcl -red "WARNING: Something is wrong."
 
 ![基本用法](picture/基本用法.jpg)
 
-### 進階用法
+---
 
-若你希望自訂`字體顏色`或`加粗文字`，可搭配 `printf` 和定義好的顔色變數使用  
-前提是你需要定義好顔色變數
-
+- 進階用法
+  - 若你希望自訂`字體顏色`或`加粗文字`，可搭配 `printf` 和定義好的顔色變數使用
+    前提是你需要定義好顔色變數
 - 我知道這太複雜了，後期會新增加快速的寫法的
 
 ```bash
@@ -38,28 +38,65 @@ printf "${RED}"; wcl -green "Red Massage"; echo -n "${NC}"
 
 ---
 
+- 如要查看幫助文檔終端鍵入 `wcl -h` `wcl -help` `wcl --help`
+
+---
+
 ## `wcl`所支援的顏色 🎨
 
-| 參數      | 顏色說明 |
-| --------- | ----    |
-| `-yellow` | 黃色背景 |
-| `-pink`   | 粉紅背景 |
-| `-gray`   | 灰色背景 |
-| `-red`    | 紅色背景 |
-| `-green`  | 綠色背景 |
-| `-blue`   | 藍色背景 |
-| `-purple` | 紫色背景 |
-| `-cyan`   | 青色背景 |
+|參數|顏色說明|
+|-|-|
+| `-yellow` | 黃色 |
+| `-pink`   | 粉色 |
+| `-gray`   | 灰色 |
+| `-red`    | 紅色 |
+| `-green`  | 綠色 |
+| `-blue`   | 藍色 |
+| `-purple` | 紫色 |
+| `-cyan`   | 青色 |
 
 ---
 
 ## 安裝
 
+由於我們在v1.0版本大幅度重寫了wcl
+重寫後的版本與之前完全不同，可以說幾乎全都重新編寫了一遍
+因此，我們希望您可以在安裝時選擇不低於1.0的版本
+
+- 1: 克隆倉庫 (推薦方式)
+終端鍵入
+
+```shell
+git clone https://github.com/ClydeCole/Wall_color
+cd Wall_color
+bash install.sh
+```
+
+- 2: 下載源碼解壓縮安裝
+  - 下載某一版本zip源碼
+  - 解壓縮
+  - 進入目錄
+  - 執行 `bash install.sh`
+
 ---
 
-🌐 語言支援  
-首次安裝時提示選擇語言  
-英語/中文
+## 卸載
+
+- 刪除程式僅需打開終端輸入
+
+```shell
+rm ~/.local/bin/wcl
+rm -rf ~/.local/share/wcl/
+```
+
+---
+
+## 🌐 語言支援
+
+- 首次安裝時提示選擇語言  
+  英語/中文
+
+- 在終端鍵入 `wcl -lang "指定語言"` 或 `wcl -lang` 進行修改語言
 
 👤 製作者
 
@@ -68,10 +105,6 @@ printf "${RED}"; wcl -green "Red Massage"; echo -n "${NC}"
 [GitHub: Clyde Cole](https://github.com/ClydeCole)
 
 ---
-
-## ⚠️ 注意事項
-
-本版本仍處於早期開發階段，架構與指令格式仍可能更動
 
 依據目前測試，兼容性較爲完善，可在  
 64 bit ubuntu 24.04  

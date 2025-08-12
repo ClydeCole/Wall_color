@@ -73,10 +73,10 @@ printf "${RED}"; wcl -green "Red Massage"; echo -n "${NC}"
 
 本版本仍處於早期開發階段，架構與指令格式仍可能更動
 
-依據目前測試，兼容性較爲完善，可在
-64 bit ubuntu 24.04
-32 bit arch lnux
-64 bit aarch android
+依據目前測試，兼容性較爲完善，可在  
+64 bit ubuntu 24.04  
+32 bit arch lnux  
+64 bit aarch android  
 運行
 
 - arch linux

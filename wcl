@@ -1,78 +1,91 @@
 #!/usr/bin/bash
+# shellcheck disable=SC1090
+# shellcheck disable=SC2154
+# shellcheck disable=SC2034
 
-sh /opt/wcl/color
-sh /opt/wcl/wcl-help-en
-sh /opt/wcl/wcl-help-cn
+source ~/.local/share/wcl/help/wcl-help-en
+source ~/.local/share/wcl/help/wcl-help-cn
+source ~/.local/share/wcl/color
+source ~/.local/share/wcl/functions
+source ~/.local/share/wcl/settings.conf
+
 
 ############### Main of Wall Color ####################
 wcl() {
-    if [ $# -lt 2 ] || [ "$(echo -e "$1" | cut -c 1)" != "-" ]; then
-    # 解析參數
-
-
-    color_option=$(echo -e "$1" | cut -c 2-)
-    # 去掉前面的短橫線
-    # 
-    #
-    #
-    text="$2"
+show_wcl_help="show_wcl_help_${language}"
+#下面是爲了檢測是否爲特殊參數
+case "$1" in
+# 幫助文檔
+    -h|-help|--hellp)
+    ${show_wcl_help}
+    exit 0
+    ;;
+    # 切換語言
+    -lang)
+    # 沒有內容，進入選擇菜單
+    if [ $# = "1" ]; then
+        setting_language
+    #中文
+    elif [ "$2" = "cn" ];then
+        sed -i 's/^language=.*/language="cn"/' ~/.local/share/wcl/settings.conf
+        echo "設定成功"
+    # 英文
+    elif [ "$2" = "en" ];then
+        sed -i 's/^language=.*/language=\"en\"/' ~/.local/share/wcl/settings.conf
+        echo "Language setting successful"
+    else
+        printf "語言錯誤,目前支持的語言有:\n正體中文: cn\nEnglish : en\n"
     fi
-    # 檢查顏色是否存在
-    bg_var="COL_${color_option}"
-    eval "BG=\$$bg_var"
-    if [ -z "$BG" ]; then
-        if [ -z "${language:-}" ]; then
-            setting
-            ${language}
-        else
-            ${language}
-        fi
-        return 1
-    fi
-    calculate_width() {
-        if command -v wc >/dev/null 2>&1 && [ "$(
-            wc -L <<EOF
-$text
-EOF
-        )" -gt 0 ] 2>/dev/null; then
-            wc -L <<EOF
-$text
-EOF
-            return
-        fi
+    exit 0
+    ;;
+esac
 
-        echo -e "$text" | awk '{
-        width = 0;
-        for (i=1; i<=length; i++) {
-            c = substr($0, i, 1);
-            if (c ~ /[[:print:]]/) {  # 可打印ASCII字符
-                width += 1;
-                } else {
-                width += 2;
-            }
-        }
-        print width;
-    }'
-    }
+# 下面是爲了檢查用戶輸入是否符合基礎要求
+if [ $# -lt "2" ]; then
+    echo "參數似乎不足"
+    ${show_wcl_help}
+    exit 1
+elif [ "${1:0:1}" != "-" ]; then
+    echo "必須以-開頭"
+    ${show_wcl_help}
+    exit 1
+elif [ $# -gt 2 ]; then
+    echo "內容過多"
+    ${show_wcl_help}
+    exit 1
+fi
 
-    get_term_width() {
-        stty size 2>/dev/null | awk '{print $2}' || echo -e 80
-    }
+color_option="${1#-}" # 識別輸入的第一個參數（顏色內容）並去除第一個-
+if declare -p "${color_option}" &>/dev/null; then # 識別用戶輸入的顏色是否有被定義
+    color_option="${!color_option}" # 將顏色展開爲變數所定義的參數
+else
+    echo "無效的顏色"
+    ${show_wcl_help}
+    exit 1
+fi
+text_option=$2 # 識別輸入的第二個參數（文本內容）
 
-    term_width=$(get_term_width)
-    text_width=$(calculate_width "$text")
+# text_len=$(python3 -c "from wcwidth import wcswidth; print(wcswidth(r'$(printf '%s' "$text_option")'))") 
+text_len=$(printf "%s$text_option" | python3 -c 's=input().strip(); print(sum(2 if ord(c) > 127 else 1 for c in s))') # 使用python獲取文本的ASCLL佔位符大小
 
-    left_pad=$(((term_width - text_width) / 2))
-    [ $left_pad -lt 0 ] && left_pad=0
-    right_pad=$((term_width - text_width - left_pad))
-    [ $right_pad -lt 0 ] && right_pad=0
+read -r rows terminal_len < <(stty size) # 獲取（終端當前長度）
 
-    left_fill=$(printf "%${left_pad}s" "")
-    right_fill=$(printf "%${right_pad}s" "")
+empty_len=$(((terminal_len - text_len ) / 2)) # 計算左右兩邊的空格數量
 
-    # 输出
-    printf "%b%s%b\n" "${BG}" "${left_fill}${text}${right_fill}" "${NC}"
+empty_len=$(python3 -c "print (' ' * ${empty_len})") # 獲取並打印空格
+
+# read -p "輸入一個數字: " num
+# if [ $((num % 2)) -eq 0 ]; then
+#     echo "偶數"
+# else
+#     echo "奇數"
+# fi
+
+if [ $(((terminal_len + text_len) % 2)) -eq 0 ]; then
+    printf "%s${color_option}${empty_len}${text_option}${empty_len}${NC}\n" # 拼湊起來
+else
+    printf "%s${color_option}${empty_len} ${text_option}${empty_len}${NC}\n" # 拼湊起來
+fi
 }
 ############### Main of Wall Color ####################
 wcl "$@"
-wcl -red "Konichiwa"

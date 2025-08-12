@@ -1,0 +1,26 @@
+# shellcheck disable=all
+###############wcl -lang 語言設定###############
+setting_language() {
+while true; do # 循環直至正確
+    wcl -pink "輸入你的語言"
+    echo -e -n "${YELLOW}"
+    wcl -gray "1➜ Chinese"
+    echo -e -n "${YELLOW}"
+    wcl -gray "2➜ English"
+    printf "%s${YELLOW}選擇 (1/2): ${BLUE}"
+# 用戶選擇語言
+    read -r Choice
+    echo -e "${NC}"
+    if [ "$Choice" = "1" ]; then
+    sed -i 's/^language=.*/language=\"cn\"/' ~/.local/share/wcl/settings.conf
+        break
+    elif [ "$Choice" = "2" ]; then
+    sed -i 's/^language=.*/language=\"en\"/' ~/.local/share/wcl/settings.conf
+        break
+    else
+        clear
+        wcl -red "錯誤的選擇, 請選擇 1 或者 2."
+    fi
+done
+}
+###############wcl -lang 語言設定###############

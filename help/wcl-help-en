@@ -1,0 +1,29 @@
+# shellcheck disable=all
+show_wcl_help_en() {
+  echo -e "${BLUE}#####${RED}This is the wall color tool help documentation${BLUE}#####${NC}"
+  echo -e "
+Usage:
+  ${BLUE}➜${NC} ${YELLOW}wcl -[color] \"Text\"${NC}
+
+Description:
+  Outputs a centered line of text with a background.
+  Perfect for scripts, warnings, or status displays.
+
+Supported Colors:
+  \033[103m  ${NC}-yellow
+  \033[48;2;255;105;180m  ${NC}-pink
+  \033[48;5;242m  ${NC}-gray
+  \033[48;5;196m  ${NC}-red
+  \033[48;5;34m  ${NC}-green
+  \033[48;5;27m  ${NC}-blue
+  \033[48;5;129m  ${NC}-purple
+  \033[48;5;51m  ${NC}-cyan
+
+Advanced Usage:
+  To modify font color or boldness, prepend the command with 
+  [${YELLOW}printf${NC}] and the defined function variable name.
+
+Usage:
+  ${BLUE}➜${NC} ${YELLOW}printf "\${color}";wcl -[color] \"Text\";printf \"\${NoColor}\"
+"
+}

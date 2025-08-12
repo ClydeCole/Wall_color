@@ -21,9 +21,9 @@ show_wcl_help_cn() {
 
 進階用法：
   若要更改字體顏色或粗體，
-  在指令前加上 [${YELLOW}echo -n${NC}] 和被定義的函數變量名。
+  在指令前加上 [${YELLOW}printf ${NC}] 和被定義的函數變量名。
 
   用法：
-  ${BLUE}➜${NC} ${YELLOW}echo -n "\${color}";wall -[color] \"Text\";echo -n \"\${NoColor}\"
+  ${BLUE}➜${NC} ${YELLOW}printf "\${color}";wall -[color] \"Text\";printf \"\${NoColor}\"
 "
 }

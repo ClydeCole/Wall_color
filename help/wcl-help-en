@@ -21,9 +21,9 @@ Supported Colors:
 
 Advanced Usage:
   To modify font color or boldness, prepend the command with 
-  [${YELLOW}echo -n${NC}] and the defined function variable name.
+  [${YELLOW}printf${NC}] and the defined function variable name.
 
 Usage:
-  ${BLUE}➜${NC} ${YELLOW}echo -n "\${color}";wcl -[color] \"Text\";echo -n \"\${NoColor}\"
+  ${BLUE}➜${NC} ${YELLOW}printf "\${color}";wcl -[color] \"Text\";printf \"\${NoColor}\"
 "
 }

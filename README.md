@@ -85,4 +85,4 @@ printf "${RED}"; wcl -green "Red Massage"; echo -n "${NC}"
 
 - 執行效果
 
-![執行效果](picture/兼容性/使用效果.png)
+![執行效果](picture/兼容性/3使用效果.png)

@@ -1,0 +1,89 @@
+# shellcheck disable=all
+source ~/.local/share/wcl/color
+
+# yellow='\033[103m'
+# pink='\033[48;2;255;105;180m'
+# gray='\033[48;5;242m'
+# red='\033[48;5;196m'
+# green='\033[48;5;34m'
+# blue='\033[48;5;27m'
+# purple='\033[48;5;129m'
+# cyan='\033[48;5;51m'
+
+# GREEN='\033[38;2;0;255;0m'
+# RED='\033[38;2;255;0;0m'
+# PINK='\033[38;2;255;105;180m'
+# ORG='\033[1;31m'
+# YELLOW='\033[1;33m'
+# BLUE='\033[38;5;117m'
+# NC='\033[0m'
+
+# Default supported colors
+color_all="    \033[103m  ${NC}-yellow
+    \033[48;2;255;105;180m  ${NC}-pink
+    \033[48;5;242m  ${NC}-gray
+    \033[48;5;196m  ${NC}-red
+    \033[48;5;34m  ${NC}-green
+    \033[48;5;27m  ${NC}-blue
+    \033[48;5;129m  ${NC}-purple
+    \033[48;5;51m  ${NC}-cyan
+"
+show_help_en() {
+    printf "Parameter options:
+    -lang               Switch language interactively.
+    -lang language      Directly switch language to 'language'
+    -h, --help          Open the help documentation\n"
+# -list lang          View supported languages
+# -v, --version       Show version information
+# -list color         View supported colors
+    printf "Color options:
+    -color \"text\"       color specifies the color, text specifies the content
+                        Text can be entered without quotes, but if you do so,
+                        please do not include spaces\n"
+    printf "Basic syntax:
+    ${BLUE}➜${NC} ${GREEN}wcl ${ORG}[${NC}-color${ORG}] \"${NC}Text${ORG}\"${NC}
+    Or, if you want to specify the text color/italic/bold etc:
+    You need to define the \${} color variable before use
+    ${BLUE}➜ ${GREEN}printf ${ORG}\"${YELLOW}\${color}${ORG}\"${NC};${GREEN}wcl ${ORG}[${NC}-color${ORG}] \"${NC}Text${ORG}\"${NC};${GREEN}printf ${ORG}\"${YELLOW}\${NC}${ORG}\"${NC}\n"
+}
+# show_help_en
+
+
+# error_ret_code="Arguments seem insufficient"
+# error_ret_code="Too many arguments"
+# error_ret_code="Must start with -"
+error_command() {
+    printf "${BLUE}#####${RED} Format Error: ${error_ret_code} ${BLUE}#####${NC}\n"
+    case ${error_ret_code} in
+    Arguments\ seem\ insufficient | Too\ many\ arguments)
+        printf "The correct command format ${PINK}should be${NC}:
+    ${BLUE}➜${NC} ${GREEN}wcl ${ORG}-[${YELLOW}color${ORG}] \"${BLUE}Text${ORG}\"${NC}\n"
+    printf "              ^       ^
+    Argument: 1       2
+    Content:  Color   Text\n"
+        if [ "${error_ret_code}" == "Arguments seem insufficient" ]; then
+            printf "Please make sure to provide ${PINK}one${NC} color and ${PINK}one${NC} text\n"
+            printf "    For more help, please type ${YELLOW}wcl -h${NC}\n"
+        else
+            printf "Please make sure the number of arguments is ${PINK}correct${NC}\n"
+            printf "If the text contains ${PINK}spaces${NC}, please wrap it in quotes ${ORG}\"${ORG}\"${NC}\n"
+            printf "    For more help, please type ${YELLOW}wcl -h${NC}\n"
+        fi
+        ;;
+    Must\ start\ with\ -)
+        printf "The correct command format ${PINK}should be${NC}:
+    ${BLUE}➜${NC} ${GREEN}wcl ${ORG}-[${YELLOW}color${ORG}] \"${BLUE}Text${ORG}\"${NC}\n"
+        printf "              ^\n"
+        printf "Please make sure the ${PINK}color${NC} argument starts with ${PINK}-${NC}\n"
+        printf "    For more help, please type ${YELLOW}wcl -h${NC}\n"
+    esac
+}
+# error_command
+
+# error_ret_code="pink"
+error_color() { # Color error
+    printf "${BLUE}#####${RED} Color Error: ${NC}${error_ret_code}${RED} does not exist ${BLUE}#####${NC}\n"
+    printf "Default supported colors:\n${color_all}\n"
+    printf "To add more colors, please edit ${YELLOW}~/.local/share/wcl/color${NC}\n"
+    printf "    - For more help, please type ${YELLOW}wcl -h${NC}\n"
+}

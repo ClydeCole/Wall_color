@@ -13,7 +13,6 @@ setting_language() {
     printf "\033[1;32m1\033[0m. 正體中文\n"
     printf "\033[1;32m2\033[0m. English\n"
     read -r -p "輸入你的選擇 (1/2): " lang_choice
-
     if [[ $lang_choice == "1" ]]; then # 選擇中文
         echo "language=\"cn\"" > ~/.local/share/wcl/settings.conf
     elif [[ $lang_choice == "2" ]]; then # 選擇英文

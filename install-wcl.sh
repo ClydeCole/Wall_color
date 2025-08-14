@@ -3,8 +3,13 @@
 #     echo "必須擁有管理員權限，正在嘗試 sudo 執行..."
 #     sudo "$0" "$@"
 # fi
-
 # 後期將設定全局安裝和用戶安裝兩個選項
+
+
+#### DEBUG####
+# HEAD="\033[1;33m[DEBUG]: \033[0m" # debug 提示
+# DEBUG_skip_reinstall=Ture # 跳過重新安裝確認
+# DEBUG_skip_choice_language=cn # 跳過語言選擇，cn 中文，en 中文。
 
 # 首次安裝時選擇語言
 setting_language() {
@@ -12,8 +17,23 @@ setting_language() {
     printf "\033[1;33m 請選擇你的語言:\033[0m\n"
     printf "\033[1;32m1\033[0m. 正體中文\n"
     printf "\033[1;32m2\033[0m. English\n"
-    read -r -p "輸入你的選擇 (1/2): " lang_choice
 
+#### DEBUG 項，可無視或刪除 ####
+    if [[ -n "$DEBUG_skip_choice_language" ]]; then
+        if [ $DEBUG_skip_choice_language == "cn" ]; then
+            echo "language=\"${DEBUG_skip_choice_language}\"" > ~/.local/share/wcl/settings.conf
+        elif [ $DEBUG_skip_choice_language == "en" ]; then
+            echo "language=\"${DEBUG_skip_choice_language}\"" > ~/.local/share/wcl/settings.conf
+        else
+            echo -e "${HEAD}Debug Error for \033[1;33mDEBUG_skip_choice_language=${DEBUG_skip_choice_language}\033[0m "
+            exit 1
+        fi
+        echo -e "${HEAD}skip setting language \"${DEBUG_skip_choice_language}\""
+        return
+    fi
+#### DEBUG 項，可無視或刪除 ####
+
+    read -r -p "輸入你的選擇 (1/2): " lang_choice
     if [[ $lang_choice == "1" ]]; then # 選擇中文
         echo "language=\"cn\"" > ~/.local/share/wcl/settings.conf
     elif [[ $lang_choice == "2" ]]; then # 選擇英文
@@ -35,7 +55,16 @@ copy_file() { # 用來複製檔案的函數
 
 if [ -f ~/.local/bin/wcl ]; then # 檢查目錄是否存在
     echo "你似乎已經安裝了WCL,是否繼續安裝?(y/N)" # 如果存在
-    read -r choice
+
+#### DEBUG 項，可無視或刪除 ####
+    if [[ -n "$DEBUG_skip_reinstall" ]];then
+        choice="y"
+        echo -e "${HEAD}skip reinstall \"y\""
+    else
+        read -r choice
+    fi
+#### DEBUG 項，可無視或刪除 ####
+
     if [[ $choice == "y" || $choice == "Y" ]]; then # 確認安裝
         rm ~/.local/bin/wcl
         rm -rf ~/.local/share/wcl

@@ -2,22 +2,19 @@
 # shellcheck disable=SC1090
 # shellcheck disable=SC2154
 # shellcheck disable=SC2034
-
-source ~/.local/share/wcl/help/wcl-help-en
-source ~/.local/share/wcl/help/wcl-help-cn
+source ~/.local/share/wcl/settings.conf
+source ~/.local/share/wcl/help/"${language}"
 source ~/.local/share/wcl/color
 source ~/.local/share/wcl/functions
-source ~/.local/share/wcl/settings.conf
-
 
 ############### Main of Wall Color ####################
 wcl() {
-show_wcl_help="show_wcl_help_${language}"
+show_help="show_help_${language}"
 #下面是爲了檢測是否爲特殊參數
 case "$1" in
 # 幫助文檔
-    -h|-help|--hellp)
-    ${show_wcl_help}
+    -h|--help)
+    ${show_help}
     exit 0
     ;;
     # 切換語言
@@ -42,16 +39,16 @@ esac
 
 # 下面是爲了檢查用戶輸入是否符合基礎要求
 if [ $# -lt "2" ]; then
-    echo "參數似乎不足"
-    ${show_wcl_help}
-    exit 1
-elif [ "${1:0:1}" != "-" ]; then
-    echo "必須以-開頭"
-    ${show_wcl_help}
+    error_ret_code="too_less_option"
+    error_command
     exit 1
 elif [ $# -gt 2 ]; then
-    echo "內容過多"
-    ${show_wcl_help}
+    error_ret_code="too_lot_option"
+    error_command
+    exit 1
+elif [ "${1:0:1}" != "-" ]; then
+    error_ret_code="start_must-"
+    error_command
     exit 1
 fi
 
@@ -59,8 +56,9 @@ color_option="${1#-}" # 識別輸入的第一個參數（顏色內容）並去�
 if declare -p "${color_option}" &>/dev/null; then # 識別用戶輸入的顏色是否有被定義
     color_option="${!color_option}" # 將顏色展開爲變數所定義的參數
 else
-    echo "無效的顏色"
-    ${show_wcl_help}
+    error_ret_code="${1#-}"
+    # echo "${error_ret_code}"
+    error_color
     exit 1
 fi
 text_option=$2 # 識別輸入的第二個參數（文本內容）

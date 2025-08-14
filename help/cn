@@ -1,0 +1,95 @@
+# shellcheck disable=all
+source ~/.local/share/wcl/color
+
+# yellow='\033[103m'
+# pink='\033[48;2;255;105;180m'
+# gray='\033[48;5;242m'
+# red='\033[48;5;196m'
+# green='\033[48;5;34m'
+# blue='\033[48;5;27m'
+# purple='\033[48;5;129m'
+# cyan='\033[48;5;51m'
+
+# GREEN='\033[38;2;0;255;0m'
+# RED='\033[38;2;255;0;0m'
+# PINK='\033[38;2;255;105;180m'
+# ORG='\033[1;31m'
+# YELLOW='\033[1;33m'
+# BLUE='\033[38;5;117m'
+# NC='\033[0m'
+
+# 默認支援的所有的顏色
+color_all="    \033[103m  ${NC}-yellow
+    \033[48;2;255;105;180m  ${NC}-pink
+    \033[48;5;242m  ${NC}-gray
+    \033[48;5;196m  ${NC}-red
+    \033[48;5;34m  ${NC}-green
+    \033[48;5;27m  ${NC}-blue
+    \033[48;5;129m  ${NC}-purple
+    \033[48;5;51m  ${NC}-cyan
+"
+show_help_cn() {
+    # printf "${BLUE}#####${NC} WCL 使用語法 ${BLUE}#####${NC}\n"
+    printf "參數選項:
+    -lang               切換語言, 交互式.
+    -lang language      直接切換語言至'language'
+    -h, --help          打開幫助文檔\n"
+# -list lang          查看支援的語言
+# -v, --version       顯示版本信息
+# -list color         查看支援的顏色
+    printf "顏色選項:
+    -color \"text\"       color指定顏色 text指定文本
+                        文本可以不添加\"或\', 但如果怎麼做, 請不要添加空格\n"
+    printf "基礎語法:
+    ${BLUE}➜${NC} ${GREEN}wcl ${ORG}[${NC}-color${ORG}] \"${NC}Text${ORG}\"${NC}
+    或者, 想要指定文本內容的顏色/斜體/粗體等:
+    你需要在使用前定義\${}顏色變數
+    ${BLUE}➜ ${GREEN}printf ${ORG}\"${YELLOW}\${color}${ORG}\"${NC};${GREEN}wcl ${ORG}[${NC}-color${ORG}] \"${NC}Text${ORG}\"${NC};${GREEN}printf ${ORG}\"${YELLOW}\${NC}${ORG}\"${NC}\n"
+}
+# show_help_cn
+
+# error_ret_code="too_less_option"
+# error_ret_code="too_lot_option"
+# error_ret_code="start_must-"
+error_command() {
+    if [ ${error_ret_code} == "too_less_option" ]; then
+        printf "${BLUE}#####${RED} 格式錯誤: 參數似乎太少 ${BLUE}#####${NC}\n"
+    elif [ ${error_ret_code} == "too_lot_option" ]; then
+        printf "${BLUE}#####${RED} 格式錯誤: 參數過多 ${BLUE}#####${NC}\n"
+    fi
+    case ${error_ret_code} in
+    too_less_option | too_lot_option)
+        printf "正確的指令格式${PINK}應該是${NC}:
+    ${BLUE}➜${NC} ${GREEN}wcl ${ORG}-[${YELLOW}color${ORG}] \"${BLUE}Text${ORG}\"${NC}\n"
+        printf "              ^       ^
+    參數:     1       2
+    內容:     顏色    文本\n"
+        if [ ${error_ret_code} == "參數似乎不足" ]; then
+            printf "請確保提供${PINK}一個${NC}顏色以及${PINK}一段${NC}文本\n"
+            printf "    如需查看過多幫助, 請輸入${YELLOW}wcl -h${NC}\n"
+        else
+            printf "請確保提供的參數數量${PINK}正確${NC}\n"
+            printf "如果文本的內容含有${PINK}空格${NC}, 請使用引號${ORG}\"${ORG}\"${NC}包含文本\n"
+            printf "    如需查看過多幫助, 請輸入${YELLOW}wcl -h${NC}\n"
+        fi
+        ;;
+        
+    start_must-)
+        printf "正確的指令格式${PINK}應該是${NC}:
+        ${BLUE}➜${NC} ${GREEN}wcl ${ORG}-[${YELLOW}color${ORG}] \"${BLUE}Text${ORG}\"${NC}\n"
+        printf "              ^\n"
+        printf "請確保${PINK}顏色${NC}參數以${PINK}-${NC}開頭\n"
+        printf "    如需查看過多幫助, 請輸入${YELLOW}wcl -h${NC}\n"
+    esac
+}
+# error_command
+
+# error_ret_code="pink"
+error_color() { #顏色錯誤
+    printf "${BLUE}#####${RED} 顏色錯誤: ${NC}${color}${RED} 不存在 ${BLUE}#####${NC}\n"
+    printf "默認支援的顏色:\n${color_all}\n"
+    printf "如需添加更多顏色, 請編輯${YELLOW}~/.local/share/wcl/color${NC}\n"
+    printf "    - 如需查看過多幫助, 請輸入${YELLOW}wcl -h${NC}\n"
+}
+# error_color
+

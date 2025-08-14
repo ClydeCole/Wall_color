@@ -39,15 +39,15 @@ esac
 
 # 下面是爲了檢查用戶輸入是否符合基礎要求
 if [ $# -lt "2" ]; then
-    error_ret_code="參數似乎不足"
-    error_command
-    exit 1
-elif [ "${1:0:1}" != "-" ]; then
-    error_ret_code="必須以-開頭"
+    error_ret_code="too_less_option"
     error_command
     exit 1
 elif [ $# -gt 2 ]; then
-    error_ret_code="參數過多"
+    error_ret_code="too_lot_option"
+    error_command
+    exit 1
+elif [ "${1:0:1}" != "-" ]; then
+    error_ret_code="start_must-"
     error_command
     exit 1
 fi

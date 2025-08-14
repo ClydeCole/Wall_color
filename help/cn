@@ -48,14 +48,17 @@ show_help_cn() {
 }
 # show_help_cn
 
-
-# error_ret_code="參數似乎不足"
-# error_ret_code="參數過多"
-# error_ret_code="必須以-開頭"
+# error_ret_code="too_less_option"
+# error_ret_code="too_lot_option"
+# error_ret_code="start_must-"
 error_command() {
-    printf "${BLUE}#####${RED} 格式錯誤: ${error_ret_code} ${BLUE}#####${NC}\n"
+    if [ ${error_ret_code} == "too_less_option" ]; then
+        printf "${BLUE}#####${RED} 格式錯誤: 參數似乎太少 ${BLUE}#####${NC}\n"
+    elif [ ${error_ret_code} == "too_lot_option" ]; then
+        printf "${BLUE}#####${RED} 格式錯誤: 參數過多 ${BLUE}#####${NC}\n"
+    fi
     case ${error_ret_code} in
-    參數似乎不足 | 參數過多)
+    too_less_option | too_lot_option)
         printf "正確的指令格式${PINK}應該是${NC}:
     ${BLUE}➜${NC} ${GREEN}wcl ${ORG}-[${YELLOW}color${ORG}] \"${BLUE}Text${ORG}\"${NC}\n"
         printf "              ^       ^
@@ -70,7 +73,8 @@ error_command() {
             printf "    如需查看過多幫助, 請輸入${YELLOW}wcl -h${NC}\n"
         fi
         ;;
-    必須以-開頭)
+        
+    start_must-)
         printf "正確的指令格式${PINK}應該是${NC}:
         ${BLUE}➜${NC} ${GREEN}wcl ${ORG}-[${YELLOW}color${ORG}] \"${BLUE}Text${ORG}\"${NC}\n"
         printf "              ^\n"

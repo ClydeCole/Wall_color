@@ -48,14 +48,17 @@ show_help_en() {
 }
 # show_help_en
 
-
-# error_ret_code="Arguments seem insufficient"
-# error_ret_code="Too many arguments"
-# error_ret_code="Must start with -"
+# error_ret_code="too_less_option"
+# error_ret_code="too_lot_option"
+# error_ret_code="start_must-"
 error_command() {
-    printf "${BLUE}#####${RED} Format Error: ${error_ret_code} ${BLUE}#####${NC}\n"
+    if [ ${error_ret_code} == "too_less_option" ]; then
+        printf "${BLUE}#####${RED} Format Error: Arguments seem insufficient ${BLUE}#####${NC}\n"
+    elif [ ${error_ret_code} == "too_lot_option" ]; then
+        printf "${BLUE}#####${RED} Format Error: Too many arguments ${BLUE}#####${NC}\n"
+    fi
     case ${error_ret_code} in
-    Arguments\ seem\ insufficient | Too\ many\ arguments)
+    too_less_option | too_lot_option)
         printf "The correct command format ${PINK}should be${NC}:
     ${BLUE}➜${NC} ${GREEN}wcl ${ORG}-[${YELLOW}color${ORG}] \"${BLUE}Text${ORG}\"${NC}\n"
     printf "              ^       ^
@@ -70,10 +73,10 @@ error_command() {
             printf "    For more help, please type ${YELLOW}wcl -h${NC}\n"
         fi
         ;;
-    Must\ start\ with\ -)
+    start_must-)
         printf "The correct command format ${PINK}should be${NC}:
     ${BLUE}➜${NC} ${GREEN}wcl ${ORG}-[${YELLOW}color${ORG}] \"${BLUE}Text${ORG}\"${NC}\n"
-        printf "              ^\n"
+        printf "          ^\n"
         printf "Please make sure the ${PINK}color${NC} argument starts with ${PINK}-${NC}\n"
         printf "    For more help, please type ${YELLOW}wcl -h${NC}\n"
     esac

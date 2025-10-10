@@ -9,11 +9,11 @@ source ~/.local/share/wcl/functions
 
 ############### Main of Wall Color ####################
 wcl() {
-show_help="show_help_${language}"
 #下面是爲了檢測是否爲特殊參數
 case "$1" in
 # 幫助文檔
     -h|--help)
+    show_help="show_help_${language}"
     ${show_help}
     exit 0
     ;;
@@ -34,6 +34,11 @@ case "$1" in
         printf "語言錯誤,目前支持的語言有:\n正體中文: cn\nEnglish : en\n"
     fi
     exit 0
+    ;;
+    # 刪除WCL
+    --uninstall)
+        uninstall_wcl
+        exit 0
     ;;
 esac
 

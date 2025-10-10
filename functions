@@ -24,3 +24,13 @@ while true; do # 循環直至正確
 done
 }
 ###############wcl -lang 語言設定###############
+
+uninstall_wcl(){
+    read -r -p "$(wcl -gray "你確定要刪除 WCL 嗎(y/N)")" choice
+    if [[ $choice == "Y" || $choice == "y" ]]; then
+        rm ~/.local/bin/wcl
+        rm -rf ~/.local/share/wcl/
+    else
+        echo "取消刪除"
+    fi
+}

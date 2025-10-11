@@ -58,6 +58,7 @@ printf "${RED}"; wcl -green "Red Massage"; echo -n "${NC}"
 因此，我們希望您可以在安裝時選擇不低於1.0的版本
 
 - 1: 克隆倉庫 (推薦方式)
+
 終端鍵入
 
 ```shell
@@ -94,13 +95,13 @@ remote: Total 124 (delta 23), reused 24 (delta 13), pack-reused 79 (from 1)
 Wall_color
 [test@archlinux ~]$ cd Wall_color/
 [test@archlinux Wall_color]$ ls
-color  functions  help  install-wcl.sh  picture  README.md  settings.conf  wcl
+color functions install.sh settings.conf wcl
 ```
 
 - 運行安裝腳本
 
 ```terminal
-[test@archlinux Wall_color]$ ./install-wcl.sh 
+[test@archlinux Wall_color]$ ./install.sh 
 WCL安裝完成
 
 如果你沒有將~/.local/bin添加進你的.rc文檔內
@@ -132,24 +133,36 @@ bash: /home/test/.local/bin/wcl: 沒有此一檔案或目錄
 
 - 終端刪除文件
 
-```shell
+```bash
 rm ~/.local/bin/wcl
 rm -rf ~/.local/share/wcl/
 ```
 
 ## 🌐 語言支援
-
 - 首次安裝時提示選擇語言  
   英語/中文
-
 - 在終端鍵入 `wcl -lang "指定語言"` 或 `wcl -lang` 進行修改語言
 
 ---
 
-👤 製作者
+## Other Information
 
+**Author & Maintainer**
 - `Clyde Cole`
 
-[GitHub: Clyde Cole](https://github.com/ClydeCole)
+**License**
+- [MIT License](LICENSE)
 
-依據目前測試，文字顯示效果兼容性較高
+---
+
+## 👥 參與貢獻
+
+🎉 歡迎貢獻！這是目前只有一個人維護的專案，希望有更多夥伴加入一起完善它！
+
+### 如何參與？
+- 提交 Bug 報告或功能建議
+- 發送 Pull Request
+- 幫助改進文檔
+- 分享給更多使用者
+
+**每一個貢獻都很珍貴！** 💝
